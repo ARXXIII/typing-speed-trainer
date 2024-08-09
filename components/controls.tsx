@@ -13,7 +13,7 @@ export const Controls = ({ wordCount, setWordCount, onRestart }: ControlsProps) 
     };
 
     return (
-        <div className="flex justify-center items-center gap-x-6 absolute top-1/4 p-3 font-medium rounded-lg bg-zinc-800/30">
+        <div className="flex justify-center items-center gap-x-6 absolute top-24 lg:top-1/4 p-3 font-medium rounded-lg bg-zinc-800/30">
             <h1 className="text-neutral-500/60">words</h1>
             <div className="w-12 h-0.5 rounded-full bg-neutral-500/60" />
             <button onClick={() => handleWordCountChange(10)} className={clsx('text-neutral-500/60 hover:text-neutral-400 transition-colors',
