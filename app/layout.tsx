@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${font.className} flex flex-col justify-between p-3 lg:px-24 lg:py-12 h-screen bg-zinc-900`}>
+            <body className={`${font.className} flex flex-col justify-between p-3 lg:px-24 lg:py-12 h-svh lg:h-screen bg-zinc-900`}>
                 <Header />
                 <main>
                     {children}

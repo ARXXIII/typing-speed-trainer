@@ -13,12 +13,11 @@ const generateText = (wordCount: number) => {
 
     for (let i = 0; i < wordCount; i++) {
         const randomWord = wordBank[Math.floor(Math.random() * wordBank.length)]
-
         textArray.push(randomWord)
     }
 
     return textArray.join(' ')
-};
+}
 
 export const Trainer = () => {
     const [wordCount, setWordCount] = useState(10)
@@ -57,24 +56,22 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
+                typingRef.current.blur()
             }
         }
     }, [startTime, textToType, typedText])
 
     const handleInput = (value: string) => {
         let newErrors = 0
-
         const newErrorMap = [...errorMap]
 
         setTypedText(value)
 
         for (let i = 0; i < value.length; i++) {
             if (value[i] !== textToType[i]) {
-
                 if (!newErrorMap[i]) {
-                    newErrors++;
-
-                    newErrorMap[i] = true;
+                    newErrors++
+                    newErrorMap[i] = true
                 }
             }
         }
@@ -87,6 +84,7 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
+                typingRef.current.blur()
             }
         }
     }
@@ -115,7 +113,7 @@ export const Trainer = () => {
 
         if (typingRef.current) {
             typingRef.current.innerText = ''
-            typingRef.current.contentEditable = "false"
+            typingRef.current.contentEditable = "true"
         }
     }
 
@@ -132,24 +130,20 @@ export const Trainer = () => {
 
     return (
         <div className="flex flex-col items-center justify-center space-y-6 h-full">
-            <div className='flex justify-between lg:justify-center gap-x-6 lg:gap-x-12 absolute top-24 lg:top-48 px-3 w-full z-50'>
-                <div className='grid grid-cols-2 gap-x-6 lg:gap-x-12'>
-                    <div className='flex gap-x-6 items-center p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
-                        <div className='flex items-center gap-x-1.5'>
-                            <MdOutlineSpeed className='text-green-500 size-7' />
-                            <p className='hidden md:block'>WPM</p>
-                        </div>
-                        <div className="hidden lg:block w-12 h-0.5 rounded-full bg-neutral-500/60" />
-                        <p className='text-neutral-400'>{endTime ? calculateWPM() : 0}</p>
+            <div className='grid grid-cols-3 gap-x-6 lg:gap-x-12 absolute top-24 lg:top-48 px-3 z-50'>
+                <div className='flex justify-between items-center gap-x-6 p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
+                    <div className='flex items-center gap-x-1.5'>
+                        <MdOutlineSpeed className='text-green-500 size-7' />
+                        <p className='hidden md:block'>wpm</p>
                     </div>
-                    <div className='flex gap-x-6 items-center p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
-                        <div className='flex items-center gap-x-1.5'>
-                            <MdErrorOutline className='text-rose-500 size-7' />
-                            <p className='hidden md:block'>Errors</p>
-                        </div>
-                        <div className="hidden lg:block w-12 h-0.5 rounded-full bg-neutral-500/60" />
-                        <p className='text-neutral-400'>{endTime ? errors : 0}</p>
+                    <p className='text-neutral-400'>{endTime ? calculateWPM() : 0}</p>
+                </div>
+                <div className='flex justify-between items-center gap-x-6 p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
+                    <div className='flex items-center gap-x-1.5'>
+                        <MdErrorOutline className='text-rose-500 size-7' />
+                        <p className='hidden md:block'>errors</p>
                     </div>
+                    <p className='text-neutral-400'>{endTime ? errors : 0}</p>
                 </div>
                 <Controls
                     wordCount={wordCount}
@@ -157,7 +151,14 @@ export const Trainer = () => {
                     onRestart={handleRestart}
                 />
             </div>
-            <div className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`} onClick={handleActivateTyping}>
+            <div onClick={handleActivateTyping} className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`}>
+
+                {endTime &&
+                    <h1 className='flex justify-center items-center absolute p-3 w-full h-full text-neutral-400 rounded-lg backdrop-blur bg-zinc-900/60 duration-200 ease-in z-10'>
+                        Check the results
+                    </h1>
+                }
+
                 <TextToType
                     textToType={textToType}
                     typedText={typedText}
