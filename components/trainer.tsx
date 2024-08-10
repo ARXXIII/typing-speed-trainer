@@ -132,11 +132,31 @@ export const Trainer = () => {
 
     return (
         <div className="flex flex-col items-center justify-center space-y-6 h-full">
-            <Controls
-                wordCount={wordCount}
-                setWordCount={setWordCount}
-                onRestart={handleRestart}
-            />
+            <div className='flex justify-between lg:justify-center gap-x-6 lg:gap-x-12 absolute top-24 lg:top-48 px-3 w-full z-50'>
+                <div className='grid grid-cols-2 gap-x-6 lg:gap-x-12'>
+                    <div className='flex gap-x-6 items-center p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
+                        <div className='flex items-center gap-x-1.5'>
+                            <MdOutlineSpeed className='text-green-500 size-7' />
+                            <p className='hidden md:block'>WPM</p>
+                        </div>
+                        <div className="hidden lg:block w-12 h-0.5 rounded-full bg-neutral-500/60" />
+                        <p className='text-neutral-400'>{endTime ? calculateWPM() : 0}</p>
+                    </div>
+                    <div className='flex gap-x-6 items-center p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
+                        <div className='flex items-center gap-x-1.5'>
+                            <MdErrorOutline className='text-rose-500 size-7' />
+                            <p className='hidden md:block'>Errors</p>
+                        </div>
+                        <div className="hidden lg:block w-12 h-0.5 rounded-full bg-neutral-500/60" />
+                        <p className='text-neutral-400'>{endTime ? errors : 0}</p>
+                    </div>
+                </div>
+                <Controls
+                    wordCount={wordCount}
+                    setWordCount={setWordCount}
+                    onRestart={handleRestart}
+                />
+            </div>
             <div className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`} onClick={handleActivateTyping}>
                 <TextToType
                     textToType={textToType}
@@ -149,19 +169,9 @@ export const Trainer = () => {
                     onInput={handleInput}
                 />
             </div>
-            <button onClick={handleRestart} className="absolute bottom-1/4 text-neutral-500/60 hover:text-neutral-400">
+            <button onClick={handleRestart} className="absolute bottom-24 lg:bottom-48 text-neutral-500/60 hover:text-neutral-400">
                 <FaArrowRotateRight />
             </button>
-
-            {endTime && (
-                <div className="absolute grid grid-cols-2 gap-3 lg:gap-6 left-3 lg:left-24 bottom-1/4 text-lg text-neutral-400">
-                    <p className='flex items-center gap-x-1.5'><MdOutlineSpeed className='text-yellow-400 size-7' /> Words per minute (WPM):</p>
-                    <p className='text-yellow-400'>{calculateWPM()}</p>
-                    <p className='flex items-center gap-x-1.5'><MdErrorOutline className='text-rose-500 size-7' />Errors:</p>
-                    <p className='text-rose-500'>{errors}</p>
-                </div>
-            )}
-
         </div>
     );
 };
