@@ -16,6 +16,8 @@ export const TypingArea = ({ typingRef, onInput }: TypingAreaProps) => {
             contentEditable={true}
             onInput={handleInput}
             spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
             suppressContentEditableWarning={true}
             className="absolute w-1 h-1 overflow-hidden text-transparent caret-transparent outline-none whitespace-pre-wrap cursor-default z-10"
         />
