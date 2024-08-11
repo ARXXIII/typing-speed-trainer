@@ -31,6 +31,7 @@ export const Trainer = () => {
     const [isTextVisible, setIsTextVisible] = useState(false)
 
     const typingRef = useRef<HTMLDivElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         setTextToType(generateText(wordCount))
@@ -56,7 +57,7 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
-                typingRef.current.blur()
+                typingRef.current.blur()  // Убираем фокус, чтобы скрыть клавиатуру
             }
         }
     }, [startTime, textToType, typedText])
@@ -84,7 +85,7 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
-                typingRef.current.blur()
+                typingRef.current.blur()  // Убираем фокус, чтобы скрыть клавиатуру
             }
         }
     }
@@ -118,18 +119,28 @@ export const Trainer = () => {
     }
 
     const handleActivateTyping = () => {
-        if (!isActive) {
-            setIsActive(true)
+        setIsActive(true)
 
-            if (typingRef.current) {
-                typingRef.current.contentEditable = "true"
-                typingRef.current.focus()
-            }
+        if (typingRef.current) {
+            typingRef.current.contentEditable = "true"
+            typingRef.current.focus()
         }
     }
 
+    const handleClickOutside = (event: MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            setStartTime(null)
+            setEndTime(new Date())
+            setIsActive(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside)
+    }, [])
+
     return (
-        <div className="flex flex-col items-center justify-center space-y-6 h-full">
+        <div ref={containerRef} className="flex flex-col items-center justify-center space-y-6 h-full">
             <div className='grid grid-cols-3 gap-x-6 lg:gap-x-12 absolute top-24 lg:top-48 px-3 z-50'>
                 <div className='flex justify-between items-center gap-x-6 p-3 text-center text-neutral-500/60 rounded-lg bg-zinc-800/30'>
                     <div className='flex items-center gap-x-1.5'>
@@ -154,9 +165,7 @@ export const Trainer = () => {
             <div onClick={handleActivateTyping} className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`}>
 
                 {endTime &&
-                    <h1 className='flex justify-center items-center absolute p-3 w-full h-full text-neutral-400 rounded-lg backdrop-blur bg-zinc-900/60 duration-200 ease-in z-10'>
-                        Check the results
-                    </h1>
+                    <div onClick={handleRestart} className='flex justify-center items-center absolute p-3 w-full h-full text-neutral-400 rounded-lg backdrop-blur bg-zinc-900/60 duration-200 ease-in z-10'>Check the results</div>
                 }
 
                 <TextToType
@@ -174,5 +183,5 @@ export const Trainer = () => {
                 <FaArrowRotateRight />
             </button>
         </div>
-    );
-};
+    )
+}
