@@ -154,7 +154,7 @@ export const Trainer = () => {
                         <MdErrorOutline className='text-rose-500 size-7' />
                         <p className='hidden md:block'>errors</p>
                     </div>
-                    <p className='text-neutral-400'>{endTime ? errors : 0}</p>
+                    <p className='text-neutral-400'>{errors}</p>
                 </div>
                 <Controls
                     wordCount={wordCount}
@@ -162,18 +162,20 @@ export const Trainer = () => {
                     onRestart={handleRestart}
                 />
             </div>
-            <div onClick={handleActivateTyping} className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`}>
+            <div className={`relative w-full ${isTextVisible ? 'fade-in' : ''}`}>
 
                 {endTime &&
                     <div onClick={handleRestart} className='flex justify-center items-center absolute p-3 w-full h-full text-neutral-400 rounded-lg backdrop-blur bg-zinc-900/60 duration-200 ease-in z-10'>Check the results</div>
                 }
 
-                <TextToType
-                    textToType={textToType}
-                    typedText={typedText}
-                    errorMap={errorMap}
-                    isActive={isActive}
-                />
+                <div onClick={handleActivateTyping}>
+                    <TextToType
+                        textToType={textToType}
+                        typedText={typedText}
+                        errorMap={errorMap}
+                        isActive={isActive}
+                    />
+                </div>
                 <TypingArea
                     typingRef={typingRef}
                     onInput={handleInput}
