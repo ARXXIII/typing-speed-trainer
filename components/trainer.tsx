@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FaArrowRotateRight } from 'react-icons/fa6'
 import { MdErrorOutline, MdOutlineSpeed } from 'react-icons/md'
 
+// Функция для генерации текста, который нужно будет напечатать
 const generateText = (wordCount: number) => {
     let textArray = []
 
@@ -20,19 +21,21 @@ const generateText = (wordCount: number) => {
 }
 
 export const Trainer = () => {
-    const [wordCount, setWordCount] = useState(10)
-    const [textToType, setTextToType] = useState(generateText(wordCount))
-    const [typedText, setTypedText] = useState('')
-    const [errors, setErrors] = useState(0)
-    const [errorMap, setErrorMap] = useState<boolean[]>(Array(textToType.length).fill(false))
-    const [startTime, setStartTime] = useState<Date | null>(null)
-    const [endTime, setEndTime] = useState<Date | null>(null)
-    const [isActive, setIsActive] = useState(false)
-    const [isTextVisible, setIsTextVisible] = useState(false)
+    const [wordCount, setWordCount] = useState(10)                                              // Количество слов для тренировки
+    const [textToType, setTextToType] = useState(generateText(wordCount))                       // Текст для печати
+    const [typedText, setTypedText] = useState('')                                              // Текст, введенный пользователем
+    const [errors, setErrors] = useState(0)                                                     // Количество ошибок
+    const [errorMap, setErrorMap] = useState<boolean[]>(Array(textToType.length).fill(false))   // Карта ошибок
+    const [startTime, setStartTime] = useState<Date | null>(null)                               // Время начала печати
+    const [endTime, setEndTime] = useState<Date | null>(null)                                   // Время окончания печати
+    const [isActive, setIsActive] = useState(false)                                             // Активен ли тренажер
+    const [isTextVisible, setIsTextVisible] = useState(false)                                   // Виден ли текст для печати
 
+    // Рефы для DOM-элементов
     const typingRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
+    // Эффект для обновления текста при изменении длины текста или количества слов
     useEffect(() => {
         setTextToType(generateText(wordCount))
         setTypedText('')
@@ -47,6 +50,7 @@ export const Trainer = () => {
         }
     }, [textToType.length, wordCount])
 
+    // Эффект для обработки начала и окончания печати
     useEffect(() => {
         if (typedText.length === 1 && !startTime) {
             setStartTime(new Date())
@@ -57,11 +61,12 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
-                typingRef.current.blur()  // Убираем фокус, чтобы скрыть клавиатуру
+                typingRef.current.blur()
             }
         }
     }, [startTime, textToType, typedText])
 
+    // Функция для обработки ввода текста
     const handleInput = (value: string) => {
         let newErrors = 0
         const newErrorMap = [...errorMap]
@@ -85,11 +90,12 @@ export const Trainer = () => {
 
             if (typingRef.current) {
                 typingRef.current.contentEditable = "false"
-                typingRef.current.blur()  // Убираем фокус, чтобы скрыть клавиатуру
+                typingRef.current.blur()
             }
         }
     }
 
+    // Функция для вычисления скорости печати в словах в минуту
     const calculateWPM = () => {
         if (!startTime || !endTime) return 0
 
@@ -99,6 +105,7 @@ export const Trainer = () => {
         return Math.round(wordsTyped / timeInMinutes)
     }
 
+    // Функция для перезапуска тренировки
     const handleRestart = () => {
         setTypedText('')
         setErrors(0)
@@ -118,6 +125,7 @@ export const Trainer = () => {
         }
     }
 
+    // Функция для активации поля ввода
     const handleActivateTyping = () => {
         setIsActive(true)
 
@@ -127,6 +135,7 @@ export const Trainer = () => {
         }
     }
 
+    // Функция для обработки кликов вне тренажера (деактивация)
     const handleClickOutside = (event: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
             setStartTime(null)
@@ -135,6 +144,7 @@ export const Trainer = () => {
         }
     }
 
+    // Эффект для отслеживания кликов вне компонента
     useEffect(() => {
         document.addEventListener('click', handleClickOutside)
     }, [])
